@@ -18,33 +18,26 @@
     }
   </script>
 </head>
-<body class="bg-[#636363] pt-16">
+<body class="bg-[#636363] pt-5">
 
-  <div class="flex justify-center ">
+  <div class="flex justify-center">
     <div class="grid grid-cols-3 max-sm:grid-cols-2" id="container">
       <!-- Your content goes here -->
     </div>
   </div>
-<div class="flex justify-center pt-10">
-<button class="py-1 px-2 bg-[#02a561] rounded-xl text-white" onclick="generateRandomCard()">Generate Random Chip</button>
-<p id="randomCardDisplay"></p>
-</div>
 
-<div class="flex justify-center">
-  <div>
-  <div class="m-4">
-    <div id="emptyDiv" class="bg-white mt-2 px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500">
-      <!-- Empty div where chips will be moved -->
-    </div>
+  <div class="flex justify-center pt-10">
+    <button class="py-1 px-2 bg-[#02a561] rounded-xl text-white" onclick="generateRandomCard()">Generate Random Chip</button>
   </div>
 
-  <div class=" gap-2 pl-1 mt-2">
-    <button class="py-1 px-8 bg-[#02a561] rounded-xl text-white" onclick="moveChips('in')">In</button>
-    <button class="py-1 px-6 bg-[#02a561] rounded-xl text-white" onclick="moveChips('out')">Out</button>
+  <div class="flex justify-center gap-2 pl-1 mt-2">
+    <div class="w-[400px] h-[100px] bg-white droppable" ondrop="drop(event)" ondragover="allowDrop(event)" id="droppedCards"></div>
   </div>
-</div>
-</div>
 
+  <div class="flex justify-center pt-3">
+    <button class="py-1 px-4 bg-[#02a561] rounded-xl text-white" onclick="showDroppedCards()">Submit</button>
+  </div>
+  
 
   <script src="script.js"></script>
 </body>
