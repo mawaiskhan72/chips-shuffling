@@ -113,3 +113,6 @@ function showDroppedCards() {
     cardListItem.textContent = `${index + 1}: ${cardName}`; // Display chip number and name
     cardNamesList.appendChild(cardListItem);
   });
+
+  displayDroppedCards.appendChild(cardNamesList);
+}
