@@ -98,10 +98,18 @@ function showDroppedCards() {
   const droppedCardNames = Array.from(droppedCards).map(card => card.textContent.trim());
   const displayDroppedCards = document.getElementById('displayDroppedCards');
   displayDroppedCards.innerHTML = ''; // Clear previous content
-  
-  const cardsDisplayDiv = document.createElement('div');
-  cardsDisplayDiv.textContent = `Dropped Cards: ${droppedCardNames.join(', ')}`;
-  displayDroppedCards.appendChild(cardsDisplayDiv);
-}
 
-// Rest of your existing JavaScript code...
+  const selectedTagsHeader = document.createElement('div');
+  selectedTagsHeader.textContent = "The selected tags are:";
+  selectedTagsHeader.style.color = 'white'; // Set text color to white
+  displayDroppedCards.appendChild(selectedTagsHeader);
+
+  const cardNamesList = document.createElement('ul');
+  cardNamesList.classList.add('dropped-card-names-list'); // Optional: Add a class for styling
+  cardNamesList.style.color = 'white'; // Set text color to white
+
+  droppedCardNames.slice(0, 5).forEach((cardName, index) => {
+    const cardListItem = document.createElement('li');
+    cardListItem.textContent = `${index + 1}: ${cardName}`; // Display chip number and name
+    cardNamesList.appendChild(cardListItem);
+  });
