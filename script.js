@@ -116,3 +116,69 @@ function showDroppedCards() {
 
   displayDroppedCards.appendChild(cardNamesList);
 }
+
+
+// Generate random cards
+function generateRandomCard() {
+  container.innerHTML = '';
+
+  const chipNumberPairs = data.map((item, index) => ({ chip: item, number: index + 1 }));
+  shuffleArray(chipNumberPairs);
+
+  chipNumberPairs.forEach(pair => {
+    createChipCard(pair.chip, pair.number - 1);
+  });
+}
+
+// Function to shuffle an array using Fisher-Yates algorithm
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+
+
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+function drag(event) {
+  event.dataTransfer.setData('text/plain', event.target.id);
+}
+
+function drop(event) {
+  event.preventDefault();
+  const data = event.dataTransfer.getData('text/plain');
+  const draggableElement = document.getElementById(data);
+  const droppable = event.target;
+  
+  if (droppable.childElementCount <= 4) {
+    droppable.appendChild(draggableElement.cloneNode(true));
+  
+    // Remove the dropped card from the original container
+    const originalContainer = draggableElement.parentNode.parentNode;
+    originalContainer.removeChild(draggableElement.parentNode);
+  } else {
+    alert('Maximum 5 chips cards allowed in the div!');
+  }
+}
+
+// Function to generate cards in ascending order
+function generateAscendingCards() {
+  container.innerHTML = '';
+
+  for (let i = 0; i < data.length; i++) {
+    createChipCard(data[i], i);
+  }
+}
+
+// Generate ascending cards on page load
+window.onload = generateAscendingCards;
+
+
+// Function to handle the "Generate Chips" button click
+function toggleGenerationOrder() {
+  generateRandomCard();
+}

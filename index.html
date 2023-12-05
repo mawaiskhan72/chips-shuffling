@@ -19,7 +19,6 @@
   </script>
 </head>
 <body class="bg-[#636363] pt-5">
-
   <div class="flex justify-center">
     <div class="grid grid-cols-3 max-sm:grid-cols-2" id="container">
       <!-- Your content goes here -->
@@ -27,7 +26,7 @@
   </div>
   
   <div class="flex justify-center pt-10">
-    <button class="py-1 px-2 bg-[#02a561] rounded-xl text-white" onclick="generateRandomCard()">Generate Random Chip</button>
+    <button class="py-1 px-2 bg-[#02a561] rounded-xl text-white" onclick="toggleGenerationOrder()">Generate Chip</button>
   </div>
   
   <div class="flex justify-center gap-2 pl-1 mt-2">
@@ -37,14 +36,10 @@
   <div class="flex justify-center pt-3">
     <button class="py-1 px-4 bg-[#02a561] rounded-xl text-white" onclick="showDroppedCards()">Submit</button>
   </div>
-  
-<!-- Your existing HTML code remains unchanged -->
 
-<div class="flex justify-center mt-3" id="displayDroppedCards"></div>
+  <div class="flex justify-center mt-3" id="displayDroppedCards"></div>
 
 
-
-  
   
 
   <script src="script.js"></script>
