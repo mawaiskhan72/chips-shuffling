@@ -114,46 +114,31 @@ function toggleGenerationOrder() {
   }
 }
 
-  function showDroppedCards() {
-    const droppedCards = document.querySelectorAll('#droppedCards .draggable');
-    const displayDroppedCards = document.getElementById('displayDroppedCards');
-    displayDroppedCards.innerHTML = ''; // Clear previous content
-  
-    const selectedTagsHeader = document.createElement('div');
-    selectedTagsHeader.textContent = "The selected tags are:";
-    selectedTagsHeader.style.color = 'white'; // Set text color to white
-    displayDroppedCards.appendChild(selectedTagsHeader);
-  
-    const cardNamesList = document.createElement('ul');
-    cardNamesList.classList.add('dropped-card-names-list'); // Optional: Add a class for styling
-    cardNamesList.style.color = 'white'; // Set text color to white
-  
-    droppedCards.forEach((card, index) => {
-      const cardListItem = document.createElement('li');
-      const cardText = card.textContent.trim().replace(/^\d+\:\s/, ''); // Removing index and colon
-      cardListItem.textContent = cardText; // Display chip name without the index
-      cardNamesList.appendChild(cardListItem);
-    });
-  
-    displayDroppedCards.appendChild(cardNamesList);
-  }
 
+function showDroppedCards() {
+  const droppedCards = document.querySelectorAll('#droppedCards .draggable');
+  const displayDroppedCards = document.getElementById('displayDroppedCards');
+  displayDroppedCards.innerHTML = ''; // Clear previous content
 
-// Add this function to create a close (X) button for each dropped card
-function createCloseButton(draggableElement, originalContainer) {
-  const closeButton = document.createElement('span');
-  closeButton.innerHTML = '&times;'; // Unicode for the "×" symbol
-  closeButton.classList.add('close-button');
-  
-  // Event listener for removing the card when the close button is clicked
-  closeButton.addEventListener('click', function() {
-    originalContainer.appendChild(draggableElement.parentNode.cloneNode(true));
-    draggableElement.parentNode.remove();
+  const selectedTagsHeader = document.createElement('div');
+  selectedTagsHeader.textContent = "The selected tags are:";
+  selectedTagsHeader.style.color = 'white'; // Set text color to white
+  displayDroppedCards.appendChild(selectedTagsHeader);
+
+  const cardNamesList = document.createElement('ul');
+  cardNamesList.classList.add('dropped-card-names-list'); // Optional: Add a class for styling
+  cardNamesList.style.color = 'white'; // Set text color to white
+
+  droppedCards.forEach(card => {
+    const cardListItem = document.createElement('li');
+    const cardText = card.textContent.trim().replace(/^\d+([A-Z\s.]+)/, '$1'); // Remove the leading numbers
+    cardListItem.textContent = cardText; // Display chip name without the leading numbers
+    cardNamesList.appendChild(cardListItem);
   });
 
-  return closeButton;
+  displayDroppedCards.appendChild(cardNamesList);
 }
-
+  
 
 
 // Update your drop function to add a close button to dropped cards
@@ -197,4 +182,8 @@ function createCloseButton(clonedElement, originalCard) {
 
   return closeButton;
 }
+
+
+
+
 
