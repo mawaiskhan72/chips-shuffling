@@ -115,7 +115,25 @@ function toggleGenerationOrder() {
 }
 
 
-function showDroppedCards() {
+
+// Function to create a chip card without the close button
+function createChipCardWithoutCloseButton(item, index) {
+  const div = document.createElement('div');
+  div.classList.add('pb-1');
+
+  const chipButton = document.createElement('button');
+  chipButton.classList.add('bg-[#f0f0f0]', 'py-1', 'px-1', 'draggable');
+  chipButton.setAttribute('draggable', 'true');
+  chipButton.textContent = item; // Set chip text without index number
+
+  div.appendChild(chipButton);
+  container.appendChild(div);
+
+  chipButton.addEventListener('dragstart', drag);
+}
+
+// Function to display selected tags without the close button
+function showSelectedTagsWithoutCloseButton() {
   const droppedCards = document.querySelectorAll('#droppedCards .draggable');
   const displayDroppedCards = document.getElementById('displayDroppedCards');
   displayDroppedCards.innerHTML = ''; // Clear previous content
@@ -138,40 +156,88 @@ function showDroppedCards() {
 
   displayDroppedCards.appendChild(cardNamesList);
 }
-  
+
+// Modify the submit button event listener to display selected tags without the close button
+document.querySelector('button[onclick="showDroppedCards()"]').addEventListener('click', function() {
+  showSelectedTagsWithoutCloseButton();
+});
 
 
-// Update your drop function to add a close button to dropped cards
+
 function drop(event) {
   event.preventDefault();
   const data = event.dataTransfer.getData('text/plain');
-  const draggableElement = document.getElementById(data);
   const droppable = event.target;
-  
-  if (droppable.childElementCount <= 4) {
-    const clonedElement = draggableElement.cloneNode(true);
-    droppable.appendChild(clonedElement);
 
-    // Add close button to the dropped card
-    const closeButton = createCloseButton(clonedElement, draggableElement);
+  if (droppable.childElementCount <= 4) {
+    const draggedElement = document.getElementById(data);
+    const clonedElement = draggedElement.cloneNode(true);
+    
+    // Append the close button to the dropped card
+    const closeButton = createCloseButton(clonedElement, draggedElement);
     clonedElement.appendChild(closeButton);
 
-    // Hide the original card instead of removing it
-    draggableElement.style.display = 'none';
-
-    // Store the original card ID in the dropped card's data attribute
-    clonedElement.setAttribute('data-original-id', draggableElement.id);
+    droppable.appendChild(clonedElement);
   } else {
-    alert('Maximum 5 chips cards allowed in the div!');
+    Toastify({
+      text: "Maximum 5 chips cards allowed in the div!",
+      backgroundColor: "red",
+      gravity: "top",
+      position: "right",
+      duration: 3000,
+      close: true,
+      onClick: function() {}
+      // Additional options and styling as needed
+    }).showToast();
   }
 }
 
-// Add this function to create a close (X) button for each dropped card
+// Function to create a close (X) button for each dropped card
 function createCloseButton(clonedElement, originalCard) {
   const closeButton = document.createElement('span');
   closeButton.innerHTML = '&times;'; // Unicode for the "×" symbol
   closeButton.classList.add('close-button');
-  
+
+  // Apply styles for the close button
+  closeButton.style.cursor = 'pointer';
+  closeButton.style.marginLeft = '5px';
+  closeButton.style.color = 'red'; // Change color as needed
+
+  // Event listener for removing the card when the close button is clicked
+  closeButton.addEventListener('click', function() {
+    clonedElement.remove(); // Remove the dropped card
+
+    // Show the original card
+    originalCard.style.display = 'block';
+  });
+
+  return closeButton;
+}
+
+
+// Function to create a close (X) button for each dropped card
+function createCloseButton(clonedElement, originalCard) {
+  const closeButton = document.createElement('span');
+  closeButton.innerHTML = '&#10005;'; // Unicode for the "×" symbol
+  closeButton.classList.add('close-button');
+
+
+  // Apply styles for the close button
+  closeButton.style.cursor = 'pointer';
+  closeButton.style.marginLeft = '5px';
+  closeButton.style.color = 'gray'; // Change color as needed
+   closeButton.style.borderRadius = '50%'; // Makes the button circular
+   closeButton.style.width = '20px'; // Set the width of the button
+   closeButton.style.height = '20px'; // Set the height of the button
+   closeButton.style.display = 'inline-flex'; // Display as flex to center content
+   closeButton.style.alignItems = 'center'; // Align content vertically
+   closeButton.style.justifyContent = 'center'; // Align content horizontally
+   closeButton.style.backgroundColor = 'gray'; // Background color set to gray
+   closeButton.style.fontSize = '14px'; // Set font size for the cross symbol
+   closeButton.style.lineHeight = '20px'; // Set line height to center vertically
+   closeButton.style.color = 'white'; // Set color of the cross symbol to white
+   closeButton.style.marginLeft = '5px'; // Add space between chip name and cross
+
   // Event listener for removing the card when the close button is clicked
   closeButton.addEventListener('click', function() {
     clonedElement.remove(); // Remove the dropped card
