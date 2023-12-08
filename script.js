@@ -114,8 +114,6 @@ function toggleGenerationOrder() {
   }
 }
 
-
-
 // Function to create a chip card without the close button
 function createChipCardWithoutCloseButton(item, index) {
   const div = document.createElement('div');
@@ -163,6 +161,17 @@ document.querySelector('button[onclick="showDroppedCards()"]').addEventListener(
 });
 
 
+const originalPositions = {};
+
+// ... (Your existing code for generating cards and functions)
+
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+function drag(event) {
+  event.dataTransfer.setData('text/plain', event.target.id);
+}
 
 function drop(event) {
   event.preventDefault();
@@ -172,25 +181,43 @@ function drop(event) {
   if (droppable.childElementCount <= 4) {
     const draggedElement = document.getElementById(data);
     const clonedElement = draggedElement.cloneNode(true);
-    
+
+    // Save original position of the dragged element
+    originalPositions[data] = {
+      parent: draggedElement.parentNode,
+      nextSibling: draggedElement.nextSibling
+    };
+
     // Append the close button to the dropped card
     const closeButton = createCloseButton(clonedElement, draggedElement);
     clonedElement.appendChild(closeButton);
 
     droppable.appendChild(clonedElement);
+
+    // Remove the dragged element from its original position
+    if (originalPositions[data]) {
+      originalPositions[data].parent.removeChild(draggedElement);
+      delete originalPositions[data]; // Remove saved position data
+    }
+
+    // Check if 5 cards are dropped, then reset original positions
+    if (droppable.childElementCount === 5) {
+      resetCardsToOriginalPositions();
+    }
   } else {
     Toastify({
       text: "Maximum 5 chips cards allowed in the div!",
       backgroundColor: "red",
       gravity: "top",
-      position: "right",
-      duration: 3000,
+      position: "right",      
       close: true,
       onClick: function() {}
       // Additional options and styling as needed
     }).showToast();
   }
 }
+
+
 
 // Function to create a close (X) button for each dropped card
 function createCloseButton(clonedElement, originalCard) {
@@ -206,9 +233,7 @@ function createCloseButton(clonedElement, originalCard) {
   // Event listener for removing the card when the close button is clicked
   closeButton.addEventListener('click', function() {
     clonedElement.remove(); // Remove the dropped card
-
-    // Show the original card
-    originalCard.style.display = 'block';
+    
   });
 
   return closeButton;
@@ -221,8 +246,6 @@ function createCloseButton(clonedElement, originalCard) {
   closeButton.innerHTML = '&#10005;'; // Unicode for the "×" symbol
   closeButton.classList.add('close-button');
 
-
-  // Apply styles for the close button
   closeButton.style.cursor = 'pointer';
   closeButton.style.marginLeft = '5px';
   closeButton.style.color = 'gray'; // Change color as needed
